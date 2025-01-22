@@ -1,24 +1,30 @@
 'use client';
 
+import { JSX } from "react";
 import { useEffect, useState, useRef } from "react";
-import { Statement } from "./api/statement/route";
-import StatementTable from "./components/StatementTable";
-import MonthSelect from "./components/MonthSelect";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { blue } from "@mui/material/colors";
 
+import { useSession } from "next-auth/react";
 
-const page = () => {
+import { Statement } from "./api/statement/route";
+import StatementTable from "./components/StatementTable";
+import MonthSelect from "./components/MonthSelect";
+import SignIn from "./components/SignIn";
+
+const Home = (): JSX.Element => {
   const [statements, setStatements] = useState<Statement[]>([]);
   const [month, setMonth] = useState<string>("10");
   const [totalAmount, setTotalAmount] = useState<string>('0');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
-  const renderFlagRef = useRef(false);
   const [error, setError] = useState<string>('');
+  const renderFlagRef = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const { data: session } = useSession();
 
   const getStatements = async () => {
     if (!loading) {
@@ -32,7 +38,7 @@ const page = () => {
       }
       const statements = await res.json() as Statement[];
       setStatements(statements);
-      // for testing loading spinner
+      // for loading spinner
       timer.current = setTimeout(() => {
         setSuccess(true);
         setLoading(false);
@@ -79,9 +85,18 @@ const page = () => {
     }),
   };
 
+  if (!session) {
+    return (
+      <>
+        <SignIn />
+      </>
+    )
+  }
+
   return (
     <>
       <Box>
+        <p>{session.user?.email}</p>
         <Button variant="contained" sx={buttonSx} disabled={loading} onClick={getStatements}>
           支払履歴を確認
         </Button>
@@ -106,4 +121,4 @@ const page = () => {
     </>
   );
 }
-export default page;
+export default Home;

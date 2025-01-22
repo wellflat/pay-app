@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Payment History",
@@ -11,9 +12,11 @@ export default function RootLayout(
 ) {
   return (
     <html lang="ja">
-      <body className={ "bg-gray-100 p-5" }>
-        {children}
-      </body>
+      <SessionProvider>
+        <body className={ "bg-gray-100 p-5" }>
+          {children}
+        </body>
+      </SessionProvider>
     </html>
   );
 }

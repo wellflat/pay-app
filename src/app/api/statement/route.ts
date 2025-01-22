@@ -14,7 +14,11 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{}>}) 
         const searchParams = req.nextUrl.searchParams;
         const card = searchParams.get('card');
         const month = searchParams.get('month');
-        const url = `http://localhost:8000/statement/card/9/month/${month}`;
+        if (!card || !month) {
+            throw new Error('card and month are required');
+        }
+        const baseUrl = process.env.API_URL;
+        const url = `${baseUrl}/statement/card/${card}/month/${month}`;
         const headers = getHeader();        
         const res = await fetch(url, { headers: headers });
         if (!res.ok) {
