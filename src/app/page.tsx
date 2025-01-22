@@ -17,6 +17,7 @@ const page = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const renderFlagRef = useRef(false);
+  const [error, setError] = useState<string>('');
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const getStatements = async () => {
@@ -24,8 +25,14 @@ const page = () => {
       setSuccess(false);
       setLoading(true);
       const res = await fetch(`/api/statement?card=2&month=${month}`);
+      if (!res.ok) {
+        setError(res.statusText);
+        setLoading(false);
+        throw new Error(`Failed to fetch statement: ${res.statusText}`);
+      }
       const statements = await res.json() as Statement[];
       setStatements(statements);
+      // for testing loading spinner
       timer.current = setTimeout(() => {
         setSuccess(true);
         setLoading(false);
@@ -92,6 +99,7 @@ const page = () => {
           />
         )}
       </Box>
+      <p>{error}</p>
       <MonthSelect handleChange={changeMonth} loading={loading} />
       <Box sx={{ marginTop: 1 }}><strong>合計金額: {totalAmount}</strong></Box>
       <StatementTable statements={statements} />
