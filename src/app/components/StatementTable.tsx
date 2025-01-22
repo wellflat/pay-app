@@ -13,22 +13,26 @@ type Props = {
 }
 
 const StatementTable = ({ statements }: Props): JSX.Element => {
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' });
+  }
+
   return (
     <TableContainer component={Paper} sx={{ marginTop: 2 }}>
       <Table sx={{ minWidth: 650 }} aria-label="statement table">
         <TableHead>
           <TableRow>
-            <TableCell>支払先</TableCell>
             <TableCell>金額</TableCell>
             <TableCell>支払日</TableCell>
+            <TableCell>支払先</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
         {statements.map((s, i) => (
           <TableRow key={s.id}>
-            <TableCell>{s.store}</TableCell>
-            <TableCell>{s.amount}</TableCell>
+            <TableCell>{formatCurrency(s.amount)}</TableCell>
             <TableCell>{s.payment_date}</TableCell>
+            <TableCell>{s.store}</TableCell>
           </TableRow>
         ))}
         </TableBody>

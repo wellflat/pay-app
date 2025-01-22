@@ -7,9 +7,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type Props = {
   handleChange: (month: string) => void;
+  loading: boolean;
 };
 
-const MonthSelect = ({ handleChange }: Props): JSX.Element => {
+const MonthSelect = ({ handleChange, loading }: Props): JSX.Element => {
 
   return (
     <Box sx={{ minWidth: 120, marginTop: 2 }}>
@@ -20,6 +21,7 @@ const MonthSelect = ({ handleChange }: Props): JSX.Element => {
               id="month-select"
               label="Month"
               defaultValue="10"
+              disabled={loading}
               onChange={
                 (e: SelectChangeEvent) => handleChange(e.target.value)
             }>
