@@ -10,7 +10,7 @@ const SignIn = () => {
 
   return (
         <Button sx={buttonSx} variant="contained" onClick={() => signIn("google")}>
-            Sign in with Google
+            Googleアカウントで認証
         </Button>
   );
 }

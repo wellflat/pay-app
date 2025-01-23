@@ -96,10 +96,10 @@ const Home = (): JSX.Element => {
   return (
     <>
       <Box>
-        <p>{session.user?.email}</p>
         <Button variant="contained" sx={buttonSx} disabled={loading} onClick={getStatements}>
           支払履歴を確認
         </Button>
+        <Box component="div" sx={{ display: 'inline', marginLeft: 2 }}>{session.user?.email}</Box>
         {loading && (
           <CircularProgress
             size={25}
