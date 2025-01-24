@@ -28,7 +28,7 @@ const StatementTable = ({ statements }: Props): JSX.Element => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {statements.map((s, i) => (
+        {statements.map((s) => (
           <TableRow key={s.id}>
             <TableCell>{formatCurrency(s.amount)}</TableCell>
             <TableCell>{s.payment_date}</TableCell>

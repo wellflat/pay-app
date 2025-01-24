@@ -9,7 +9,7 @@ export interface Statement {
     payment_month: number;
 }
 
-export const GET = async (req: NextRequest, { params }: { params: Promise<{}>}) => {
+export const GET = async (req: NextRequest) => {
     try {
         const searchParams = req.nextUrl.searchParams;
         const card = searchParams.get('card');
@@ -33,7 +33,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{}>}) 
     }
 }
 
-export const getHeader = () => {
+const getHeader = () => {
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
         throw new Error('API_KEY is not set');
@@ -41,5 +41,4 @@ export const getHeader = () => {
     const headers = {'X-API-KEY': apiKey};
     return headers;
 };
-
 export const dynamic = 'force-dynamic';
