@@ -11,10 +11,10 @@ const Progress = ({ loading }: Props): JSX.Element => {
     const sx = {
         color: blue[500],
         position: 'absolute',
-        top: '0%',
-        left: '0%',
-        marginTop: '25px',
-        marginLeft: '64px',
+        top: '50%',
+        left: '50%',
+        marginTop: '0px',
+        marginLeft: '0px',
     };
 
     return (

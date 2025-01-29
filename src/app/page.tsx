@@ -4,18 +4,14 @@ import React from "react";
 import { JSX } from "react";
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { blue } from "@mui/material/colors";
-
 import { Statement } from "./api/statement/route";
 import Header from "./components/Header";
 import StatementTable from "./components/StatementTable";
 import MonthSelect from "./components/MonthSelect";
-import SignIn from "./components/SignIn";
 import Progress from "./components/Progress";
-
 
 
 const Home = (): JSX.Element => {
@@ -57,11 +53,11 @@ const Home = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (renderFlagRef.current) {
+    //if (renderFlagRef.current) {
       getStatements();
-    } else {
-      renderFlagRef.current = true;
-    }
+    //} else {
+    //  renderFlagRef.current = true;
+    //}
   }, [month]);
 
   useEffect(() => {
@@ -91,8 +87,10 @@ const Home = (): JSX.Element => {
       <Box>
         <Button variant="contained" sx={buttonSx} disabled={loading} onClick={getStatements}>
           支払履歴を確認
-        </Button>
-        <Box component="div" sx={{ display: 'inline', marginLeft: 2 }}>{session.user?.email}</Box>
+        </Button>      
+        <Box component="div" sx={{ display: 'inline', marginLeft: 2 }}>
+          { session ? session.user?.email : 'Not signed in' }
+          </Box>      
         <Progress loading={loading} />
       </Box>
       <p>{error}</p>
