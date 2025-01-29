@@ -1,13 +1,13 @@
-
-import Box from '@mui/material/Box';
+import { JSX } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { blue } from '@mui/material/colors';
+
 
 type Props = {
     loading: boolean;
 };
 
-const Progress = ({ loading }: Props) => {
+const Progress = ({ loading }: Props): JSX.Element => {
     const sx = {
         color: blue[500],
         position: 'absolute',

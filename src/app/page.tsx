@@ -37,9 +37,12 @@ const Home = (): JSX.Element => {
         setError(res.statusText);
         setLoading(false);
         throw new Error(`Failed to fetch statement: ${res.statusText}`);
+      } else {
+        const statements = await res.json() as Statement[];
+        setStatements(statements);
+        setSuccess(true);
+        setLoading(false);
       }
-      const statements = await res.json() as Statement[];
-      setStatements(statements);
     }
   };
 
