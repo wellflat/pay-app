@@ -21,7 +21,7 @@ const Home = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const renderFlagRef = useRef(false);
+  const renderFlagRef = useRef(false);  // 初回判定用
   const { data: session } = useSession();
 
   const getStatements = async () => {
@@ -53,11 +53,11 @@ const Home = (): JSX.Element => {
   };
 
   useEffect(() => {
-    //if (renderFlagRef.current) {
+    if (renderFlagRef.current) {
       getStatements();
-    //} else {
-    //  renderFlagRef.current = true;
-    //}
+    } else {
+      renderFlagRef.current = true;
+    }
   }, [month]);
 
   useEffect(() => {
