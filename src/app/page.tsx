@@ -1,29 +1,29 @@
 'use client';
 
+import React from "react";
 import { JSX } from "react";
 import { useEffect, useState, useRef } from "react";
+import { useSession } from "next-auth/react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import { blue } from "@mui/material/colors";
-
-import { useSession } from "next-auth/react";
 
 import { Statement } from "./api/statement/route";
 import StatementTable from "./components/StatementTable";
 import MonthSelect from "./components/MonthSelect";
 import SignIn from "./components/SignIn";
+import Progress from "./components/Progress";
+
 
 const Home = (): JSX.Element => {
   const [statements, setStatements] = useState<Statement[]>([]);
   const [month, setMonth] = useState<string>("10");
-  const [totalAmount, setTotalAmount] = useState<string>('0');
+  const [totalAmount, setTotalAmount] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const renderFlagRef = useRef(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { data: session } = useSession();
 
   const getStatements = async () => {
@@ -38,11 +38,6 @@ const Home = (): JSX.Element => {
       }
       const statements = await res.json() as Statement[];
       setStatements(statements);
-      // for loading spinner
-      timer.current = setTimeout(() => {
-        setSuccess(true);
-        setLoading(false);
-      }, 1000);
     }
   };
 
@@ -54,7 +49,7 @@ const Home = (): JSX.Element => {
     const amount = statements.reduce((acc, s) => acc + s.amount, 0);
     const currency = amount.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' });
     setTotalAmount(currency);
-  }
+  };
 
   useEffect(() => {
     if (renderFlagRef.current) {
@@ -67,14 +62,6 @@ const Home = (): JSX.Element => {
   useEffect(() => {
     getTotalAmount();
   }, [statements]);
-
-  useEffect(() => {
-    return () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    };
-  }, []);
 
   const buttonSx = {
     ...(success && {
@@ -100,19 +87,7 @@ const Home = (): JSX.Element => {
           支払履歴を確認
         </Button>
         <Box component="div" sx={{ display: 'inline', marginLeft: 2 }}>{session.user?.email}</Box>
-        {loading && (
-          <CircularProgress
-            size={25}
-            sx={{
-              color: blue[500],
-              position: 'absolute',
-              top: '0%',
-              left: '0%',
-              marginTop: '25px',
-              marginLeft: '64px',
-            }}
-          />
-        )}
+        <Progress loading={loading} />
       </Box>
       <p>{error}</p>
       <MonthSelect handleChange={changeMonth} loading={loading} />
