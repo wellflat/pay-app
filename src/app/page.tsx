@@ -10,10 +10,12 @@ import Button from "@mui/material/Button";
 import { blue } from "@mui/material/colors";
 
 import { Statement } from "./api/statement/route";
+import Header from "./components/Header";
 import StatementTable from "./components/StatementTable";
 import MonthSelect from "./components/MonthSelect";
 import SignIn from "./components/SignIn";
 import Progress from "./components/Progress";
+
 
 
 const Home = (): JSX.Element => {
@@ -75,13 +77,14 @@ const Home = (): JSX.Element => {
   if (!session) {
     return (
       <>
-        <SignIn />
+        <Header is_auth={false}/>
       </>
     )
   }
 
   return (
     <>
+      <Header is_auth={true}/>
       <Box>
         <Button variant="contained" sx={buttonSx} disabled={loading} onClick={getStatements}>
           支払履歴を確認

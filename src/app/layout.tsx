@@ -5,6 +5,10 @@ import { SessionProvider } from "next-auth/react";
 export const metadata: Metadata = {
   title: "Payment History",
   description: "payment history by your credit card",
+  robots: {
+    follow: false,
+    index: false
+  }
 };
 
 export default function RootLayout(
