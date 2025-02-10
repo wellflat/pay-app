@@ -30,6 +30,7 @@ const MonthSelect = ({ handleChange, loading }: Props): JSX.Element => {
               <MenuItem value={11}>2024/11</MenuItem>
               <MenuItem value={12}>2024/12</MenuItem>
               <MenuItem value={1}>2025/01</MenuItem>
+              <MenuItem value={2}>2025/02</MenuItem>
           </Select>
       </FormControl>
     </Box>
@@ -37,3 +38,4 @@ const MonthSelect = ({ handleChange, loading }: Props): JSX.Element => {
 };
 
 export default MonthSelect;
+
