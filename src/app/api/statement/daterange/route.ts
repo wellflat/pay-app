@@ -1,32 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export interface Statement {
-    id: number;
-    card_id: number;
-    store: string;
-    amount: number;
-    payment_date: string;
-    payment_month: number;
+export interface DateRange {
+    start: string;
+    end: string;
 }
 
 export const GET = async (req: NextRequest) => {
     try {
         const searchParams = req.nextUrl.searchParams;
         const card = searchParams.get('card');
-        const month = searchParams.get('month');
-        if (!card || !month) {
-            throw new Error('card and month are required');
+        if (!card) {
+            throw new Error('card is required');
         }
         const baseUrl = process.env.API_URL;
-        const url = `${baseUrl}/statement/card/${card}/month/${month}`;
+        const url = `${baseUrl}/statement/card/${card}/daterange`;
         const headers = getHeader();        
         const res = await fetch(url, { headers: headers });
-        console.log(res);
         if (!res.ok) {
             throw new Error('支払履歴がありません');
         }
-        const statements = await res.json() as Statement[];
-        return NextResponse.json(statements);
+        const range = await res.json() as DateRange;
+        return NextResponse.json(range);
     } catch (error) {
         console.error(error);
         throw error;

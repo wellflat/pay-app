@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { blue } from "@mui/material/colors";
 import { Statement } from "./api/statement/route";
+import { DateRange } from "./api/statement/daterange/route";
 import Header from "./components/Header";
 import StatementTable from "./components/StatementTable";
 import MonthSelect from "./components/MonthSelect";
@@ -15,6 +16,7 @@ import Progress from "./components/Progress";
 
 
 const Home = (): JSX.Element => {
+  const [dateRange, setDateRange] = useState<DateRange>({ start: '', end: '' });
   const [statements, setStatements] = useState<Statement[]>([]);
   const [month, setMonth] = useState<string>("10");
   const [totalAmount, setTotalAmount] = useState<string>("0");
@@ -24,15 +26,29 @@ const Home = (): JSX.Element => {
   const renderFlagRef = useRef(false);  // 初回判定用
   const { data: session } = useSession();
 
+  const getDateRange = async () => {
+    const res = await fetch(`/api/statement/daterange?card=2`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch date range: ${res.statusText}`);
+    } else {
+      const dateRange = await res.json() as { start: string, end: string };
+      setDateRange(dateRange);
+    }
+  };
+  useEffect(() => {
+    getDateRange();
+  }, []);
+  
   const getStatements = async () => {
     if (!loading) {
       setSuccess(false);
       setLoading(true);
       const res = await fetch(`/api/statement?card=2&month=${month}`);
+      console.log(res);
       if (!res.ok) {
-        setError(res.statusText);
+        setError('支払履歴がありません');
+        setStatements([]);
         setLoading(false);
-        throw new Error(`Failed to fetch statement: ${res.statusText}`);
       } else {
         const statements = await res.json() as Statement[];
         setStatements(statements);
@@ -61,6 +77,9 @@ const Home = (): JSX.Element => {
   }, [month]);
 
   useEffect(() => {
+    if (statements.length !== 0) {
+      setError('');
+    }
     getTotalAmount();
   }, [statements]);
 
@@ -89,12 +108,12 @@ const Home = (): JSX.Element => {
           支払履歴を確認
         </Button>      
         <Box component="div" sx={{ display: 'inline', marginLeft: 2 }}>
-          { session ? session.user?.email : 'Not signed in' }
-          </Box>      
+          { session ? session.user?.email : 'Not signed in' }&nbsp;&nbsp;
+          {error}
+        </Box>      
         <Progress loading={loading} />
       </Box>
-      <p>{error}</p>
-      <MonthSelect handleChange={changeMonth} loading={loading} />
+      <MonthSelect handleChange={changeMonth} dateRange={dateRange} loading={loading} />
       <Box sx={{ marginTop: 1 }}><strong>合計金額: {totalAmount}</strong></Box>
       <StatementTable statements={statements} />
     </>
